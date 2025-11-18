@@ -5,11 +5,11 @@ class Item {
 public:
 	Item(string name);
 	string getName();
-	void setKeyValue(int val);
+	void setItemNum(int val);
 	virtual void display(string extraText) {
-		printf("%i. %s %s\n", m_iKeyValue, m_sName.c_str(), extraText.c_str());
+		printf("%i. %s %s\n", m_iItemNum, m_sName.c_str(), extraText.c_str());
 	}
-	int getKeyValue();
+	int getItemNum();
 	virtual void execute() {
 		return;
 	}
@@ -21,5 +21,5 @@ public:
 	}
 private:
 	string m_sName;
-	int m_iKeyValue;
+	int m_iItemNum;
 };

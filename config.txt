@@ -1,0 +1,9 @@
+Button:0
+A
+Slider:75
+B
+Combo:1
+Button_1:0
+Button_2:1
+Slider_1:20
+C

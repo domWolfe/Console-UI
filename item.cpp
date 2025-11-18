@@ -1,11 +1,11 @@
 #include "item.hpp"
 
-void Item::setKeyValue(int val) {
-	m_iKeyValue = val;
+void Item::setItemNum(int val) {
+	m_iItemNum = val;
 }
 
-int Item::getKeyValue() {
-	return m_iKeyValue;
+int Item::getItemNum() {
+	return m_iItemNum;
 }
 
 string Item::getName() {

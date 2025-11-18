@@ -3,15 +3,18 @@
 void Tab::display() {
 	printf("<<< %s >>>\n", m_sName.c_str());
 	for (int i = 1; i <= m_iItems.size(); i++) {
-		m_iItems.at(i - 1)->setKeyValue(i);
+		m_iItems.at(i - 1)->setItemNum(i);
 		(m_iSelectedItem == i - 1) ? m_iItems.at(i - 1)->display("<--") : m_iItems.at(i - 1)->display("");
 	}
 }
 
 void Tab::think() {
-	if (GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_DOWN)) {
+	bool up = (GetAsyncKeyState(VK_UP) & 0x8000) != 0;
+	bool down = (GetAsyncKeyState(VK_DOWN) & 0x8000) != 0;
+	if (up != down && (up || down)) {
 		Sleep(75);
-		m_iSelectedItem = GetAsyncKeyState(VK_DOWN) ? Math::menu_wrap(m_iSelectedItem + 1, 0, m_iItems.size() - 1) : Math::menu_wrap(m_iSelectedItem - 1, m_iItems.size() - 1, 0);
+		down ? m_iSelectedItem++ : m_iSelectedItem--;
+		m_iSelectedItem = down ? Math::menu_wrap(m_iSelectedItem, 0, m_iItems.size() - 1) : Math::menu_wrap(m_iSelectedItem, m_iItems.size() - 1, 0);
 		system("cls");
 		display();
 	}
