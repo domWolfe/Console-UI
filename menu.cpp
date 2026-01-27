@@ -5,6 +5,19 @@
 Menu::Menu(string name, vector<Tab>&& tabs) {
 	m_sName = name;
 	m_tTabs = move(tabs);
+
+	HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+
+	DWORD mode = 0;
+	GetConsoleMode(hInput, &mode);
+
+	mode &= ~ENABLE_QUICK_EDIT_MODE;
+	mode |= ENABLE_EXTENDED_FLAGS;
+	mode |= ENABLE_WINDOW_INPUT;
+	mode |= ENABLE_MOUSE_INPUT;
+
+	SetConsoleMode(hInput, mode);
+
 }
 
 void Menu::setInMain(bool val) {
@@ -72,32 +85,60 @@ void Menu::start() {
 	}
 }
 
-void Menu::think() {
-	while (true) {
-		if (GetAsyncKeyState(VK_ESCAPE)) {
-			save_config();
-			break;
+void Menu::handleKey(WORD key) {
+
+	if (key == VK_ESCAPE) {
+		save_config();
+		exit(0);
+	}
+
+	if (!m_bInMain) {
+
+		if (key == VK_BACK) {
+			system("cls");
+			start();
+			m_bInMain = true;
+			return;
 		}
 
-		if (!m_bInMain) {
-			if (GetAsyncKeyState(VK_BACK)) {
-				system("cls");
-				start();
-				m_bInMain = true;
-			}
-			m_tTabs.at(m_iSelectedTab).think();
-			continue;
+		m_tTabs.at(m_iSelectedTab).think();
+		return;
+	}
+
+	if (key >= 0x31 && key <= 0x39) { //0x31 -> Key 1 to 0x39 -> Key 9
+		int index = key - 0x31;
+
+		if (index < m_tTabs.size()) {
+			system("cls");
+			m_tTabs.at(index).display();
+			m_iSelectedTab = index;
+			m_bInMain = false;
 		}
-		else {
-			for (int i = 0x31; i <= 0x39; i++) {
-				if (GetAsyncKeyState(i) && m_tTabs.size() > (i - 49)) {
-					system("cls");
-					Sleep(50);
-					m_tTabs.at(i - 49).display();
-					m_iSelectedTab = i - 49;
-					m_bInMain = false;
-				}
-			}
+	}
+}
+
+void Menu::think() {
+	INPUT_RECORD record;
+	DWORD eventsRead;
+
+	while (true) {
+		ReadConsoleInput(m_hInput, &record, 1, &eventsRead);
+
+		switch (record.EventType) {
+
+		case FOCUS_EVENT:
+			m_bFocused = record.Event.FocusEvent.bSetFocus;
+			break;
+
+		case KEY_EVENT:
+			if (!m_bFocused)
+				break;
+
+			if (!record.Event.KeyEvent.bKeyDown)
+				break;
+
+			handleKey(record.Event.KeyEvent.wVirtualKeyCode);
+			break;
 		}
 	}
 }

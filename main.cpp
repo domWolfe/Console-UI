@@ -51,4 +51,7 @@ int main()
 	Menu menu = Menu("Console User Interface", move(tabs));
 	menu.init();
 	menu.think();
+
+	_CrtDumpMemoryLeaks();
+	return 0;
 }
