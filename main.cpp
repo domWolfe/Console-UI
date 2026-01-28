@@ -37,11 +37,11 @@ int main()
 
 	bool val_1 = true;
 	bool val_2 = true;
-	items_c.push_back(make_unique<Button>("Button_1", val_1));
-	items_c.push_back(make_unique<Button>("Button_2", val_2));
+	items_c.push_back(make_unique<Button>("Button#1", val_1));
+	items_c.push_back(make_unique<Button>("Button#2", val_2));
 
 	int slider_1 = 100;
-	items_c.push_back(make_unique<Slider>("Slider_1", slider_1, 0, 100, 5));
+	items_c.push_back(make_unique<Slider>("Slider#1", slider_1, 0, 100, 5));
 
 	vector<Tab> tabs;
 	tabs.emplace_back(Tab("A", move(items)));

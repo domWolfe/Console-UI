@@ -15,7 +15,7 @@ public:
 		return combo;
 	}
 	void display(string extraText) override {
-		printf("%i. %s [%s] { %s } %s\n", this->getItemNum(), this->getName().c_str(), m_vCombo.at(m_iValue).c_str(), renderComboText().c_str(), extraText.c_str());
+		printf("%i. %s [%s] { %s } %s\n", this->getItemNum(), this->getDisplayName().c_str(), m_vCombo.at(m_iValue).c_str(), renderComboText().c_str(), extraText.c_str());
 	}
 	virtual void execute() override {
 		m_iValue = Math::wrap(m_iValue + 1, 0, m_vCombo.size() - 1);

@@ -6,7 +6,7 @@ public:
 	Button(string name, bool& value) : Item(name), m_bValue(value) {};
 	bool getValue() { return m_bValue; };
 	void display(string extraText) override {
-		printf("%i. %s [%s] %s\n", this->getItemNum(), this->getName().c_str(), m_bValue ? "X" : "", extraText.c_str());
+		printf("%i. %s [%s] %s\n", this->getItemNum(), this->getDisplayName().c_str(), m_bValue ? "X" : "", extraText.c_str());
 	}
 	virtual void execute() override {
 		m_bValue = !m_bValue;
