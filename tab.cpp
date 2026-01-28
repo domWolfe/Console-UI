@@ -12,7 +12,7 @@ void Tab::think() {
 	bool up = (GetAsyncKeyState(VK_UP) & 0x8000) != 0;
 	bool down = (GetAsyncKeyState(VK_DOWN) & 0x8000) != 0;
 	if (up != down && (up || down)) {
-		Sleep(75);
+		Sleep(85);
 		down ? m_iSelectedItem++ : m_iSelectedItem--;
 		m_iSelectedItem = down ? Math::menu_wrap(m_iSelectedItem, 0, m_iItems.size() - 1) : Math::menu_wrap(m_iSelectedItem, m_iItems.size() - 1, 0);
 		system("cls");

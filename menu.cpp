@@ -17,7 +17,6 @@ Menu::Menu(string name, vector<Tab>&& tabs) {
 	mode |= ENABLE_MOUSE_INPUT;
 
 	SetConsoleMode(hInput, mode);
-
 }
 
 void Menu::setInMain(bool val) {

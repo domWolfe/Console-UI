@@ -9,13 +9,6 @@
 #include "tab.hpp"
 #include "menu.hpp"
 
-/*
-
-TODO:
-	- Add in window only functionality
-
-*/
-
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
