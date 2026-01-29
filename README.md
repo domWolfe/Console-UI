@@ -33,14 +33,14 @@ Built upon my [Menu Framework](https://github.com/domWolfe/menu-framework) to ex
 ## Example Menu Code
 
 ```c++
-vector<unique_ptr<Item>> items;
-bool val = true;
-items.push_back(make_unique<Button>("Button", val));
+	vector<unique_ptr<Item>> items;
+	bool val = true;
+	items.push_back(make_unique<Button>("Button", val));
 
-vector<Tab> tabs;
-tabs.emplace_back(Tab("A", move(items)));
+	vector<unique_ptr<Tab>> tabs;
+	tabs.push_back(make_unique<Tab>("A", move(items)));
 
-Menu menu = Menu("Console User Interface", move(tabs));
-menu.init();
-menu.think();
+	Menu menu = Menu("Console User Interface", move(tabs));
+	menu.init();
+	menu.think();
 ```
