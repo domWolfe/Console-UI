@@ -2,7 +2,7 @@
 #include "menu.hpp"
 #include <fstream>
 
-Menu::Menu(string name, vector<Tab>&& tabs) {
+Menu::Menu(string name, vector<unique_ptr<Tab>>&& tabs) {
 	m_sName = name;
 	m_tTabs = move(tabs);
 
@@ -36,8 +36,8 @@ void Menu::init() {
 	m_bInMain = true;
 	typeInText("<<< " + m_sName + " >>>");
 	for (int i = 1; i <= m_tTabs.size(); i++) {
-		typeInText(to_string(i) + ". " + m_tTabs.at(i - 1).getName().c_str());
-		m_tTabs.at(i - 1).setKeyValue(0x31 + (i - 1));
+		typeInText(to_string(i) + ". " + m_tTabs.at(i - 1)->getName().c_str());
+		m_tTabs.at(i - 1)->setKeyValue(0x31 + (i - 1));
 	}
 	load_config();
 }
@@ -48,7 +48,7 @@ bool Menu::load_config() {
 	string line;
 	if (configFile.is_open()) {
 		for (int i = 0; i < m_tTabs.size(); i++) {
-			m_tTabs.at(i).loadConfig(configFile);
+			m_tTabs.at(i)->loadConfig(configFile);
 		}
 		configFile.close();
 		return true;
@@ -64,7 +64,7 @@ bool Menu::save_config() {
 	configFile.open("config.txt");
 	if (configFile.is_open()) {
 		for (int i = 0; i < m_tTabs.size(); i++) {
-			configFile << m_tTabs.at(i).createConfig();
+			configFile << m_tTabs.at(i)->createConfig();
 		}
 		configFile.close();
 		return true;
@@ -79,8 +79,8 @@ void Menu::start() {
 	m_bInMain = true;
 	printf("<<< %s >>>\n", m_sName.c_str());
 	for (int i = 1; i <= m_tTabs.size(); i++) {
-		printf("%i. %s\n", i, m_tTabs.at(i - 1).getName().c_str());
-		m_tTabs.at(i - 1).setKeyValue(0x31 + (i - 1));
+		printf("%i. %s\n", i, m_tTabs.at(i - 1)->getName().c_str());
+		m_tTabs.at(i - 1)->setKeyValue(0x31 + (i - 1));
 	}
 }
 
@@ -88,7 +88,8 @@ void Menu::handleKey(WORD key) {
 
 	if (key == VK_ESCAPE) {
 		save_config();
-		exit(0);
+		m_bRunning = false;
+		return;
 	}
 
 	if (!m_bInMain) {
@@ -100,7 +101,7 @@ void Menu::handleKey(WORD key) {
 			return;
 		}
 
-		m_tTabs.at(m_iSelectedTab).think();
+		m_tTabs.at(m_iSelectedTab)->think();
 		return;
 	}
 
@@ -109,7 +110,7 @@ void Menu::handleKey(WORD key) {
 
 		if (index < m_tTabs.size()) {
 			system("cls");
-			m_tTabs.at(index).display();
+			m_tTabs.at(index)->display();
 			m_iSelectedTab = index;
 			m_bInMain = false;
 		}
@@ -120,7 +121,7 @@ void Menu::think() {
 	INPUT_RECORD record;
 	DWORD eventsRead;
 
-	while (true) {
+	while (m_bRunning) {
 		ReadConsoleInput(m_hInput, &record, 1, &eventsRead);
 
 		switch (record.EventType) {

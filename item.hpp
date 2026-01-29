@@ -4,6 +4,7 @@
 class Item {
 public:
 	Item(string name);
+	virtual ~Item() = default;
 	string getName();
 	string setDisplayName(const string& name);
 	string getDisplayName();

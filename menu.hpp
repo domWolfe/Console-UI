@@ -3,7 +3,7 @@
 
 class Menu {
 public:
-	Menu(string name, vector<Tab>&& tabs);
+	Menu(string name, vector<unique_ptr<Tab>>&& tabs);
 	void init();
 	void start();
 	void think();
@@ -14,9 +14,10 @@ public:
 
 private:
 	string m_sName;
-	vector<Tab> m_tTabs;
+	vector<unique_ptr<Tab>> m_tTabs;
 	bool m_bInMain;
 	int m_iSelectedTab = NULL;
 	HANDLE m_hInput = GetStdHandle(STD_INPUT_HANDLE);
 	bool m_bFocused = true;
+	bool m_bRunning = true;
 };
